@@ -1,4 +1,4 @@
-# PS4-
+# PS4- Jail Break "Method"
 Enhancing PS4 Jailbreaking: Simplifying the 11.00 Firmware Exploitation Process with Raspberry Pi:
 
 
