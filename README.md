@@ -6,23 +6,32 @@ I've developed a personal solution aimed at simplifying the PS4 jailbreaking pro
 
 #!/bin/bash
 
+# Update system and install system dependencies
+echo "Installing required system packages..."
+sudo apt update && sudo apt install -y git build-essential python3 python3-pip python3-scapy || { echo "Error: System package installation failed."; exit 1; }
+
 # Clone the repository
+echo "Cloning PPPwn repository..."
 git clone --recursive https://github.com/TheOfficialFloW/PPPwn || { echo "Error: Cloning repository failed."; exit 1; }
 
 # Navigate into the cloned directory
 cd PPPwn || { echo "Error: Directory not found."; exit 1; }
 
-# Install requirements
-sudo pip install -r requirements.txt || { echo "Error: Installing requirements failed."; exit 1; }
+# Install Python requirements
+echo "Installing Python dependencies..."
+sudo pip3 install -r requirements.txt --break-system-packages || sudo pip3 install scapy --break-system-packages || { echo "Error: Installing requirements failed."; exit 1; }
 
 # Compile the payloads for FW 11.00
+echo "Compiling stage1 and stage2 payloads..."
 make -C stage1 FW=1100 clean && make -C stage1 FW=1100 || { echo "Error: Compiling stage1 payload failed."; exit 1; }
 make -C stage2 FW=1100 clean && make -C stage2 FW=1100 || { echo "Error: Compiling stage2 payload failed."; exit 1; }
 
-# Run the exploit
-sudo python3 http://pppwn.py --interface=enp0s3 --fw=1100 || { echo "Error: Exploit failed."; exit 1; }
+# Run the exploit (Change eth0 to usb0 if using Ethernet gadget mode)
+echo "Executing exploit..."
+sudo python3 pppwn.py --interface=eth0 --fw=1100 || { echo "Error: Exploit failed."; exit 1; }
 
 echo "Exploit completed successfully."
+
 
 Save this script with a .sh extension (e.g., automate_exploit.sh) and make it executable using the following command:
 
